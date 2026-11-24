@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Environment, ContactShadows, RoundedBox, Text } from '@react-three/drei';
+import { ContactShadows, RoundedBox, Text } from '@react-three/drei';
 import * as THREE from 'three';
 import { useGameStore, liveTransforms } from '../store/useGameStore';
 import { StylizedPlayer } from '../components/StylizedPlayer';
@@ -161,8 +161,7 @@ export function WorldScene() {
       <color attach="background" args={['#1c1917']} />
       <ambientLight intensity={0.65} />
       <directionalLight position={[8, 15, 10]} intensity={1.3} castShadow shadow-mapSize={[1024, 1024]} />
-      <Environment preset="sunset" />
-
+    
       <GameLoop />
       <LincolnArena />
 
@@ -189,7 +188,7 @@ export function WorldScene() {
           getEmote={() => liveTransforms.partnerEmote}
         />
       )}
-
+      
       <ContactShadows position={[0, 0.01, 0]} opacity={0.4} scale={20} blur={2} />
     </Canvas>
   );
