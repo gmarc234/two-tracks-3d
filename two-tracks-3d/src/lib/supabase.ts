@@ -1,28 +1,24 @@
 import { createClient } from '@supabase/supabase-js';
-interface ImportMetaEnv {
-  readonly VITE_SUPABASE_URL: string;
-  readonly VITE_SUPABASE_ANON_KEY: string;
-}
 
-interface ImportMeta {
-  readonly env: ImportMetaEnv;
-}
-
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+const supabaseUrl = (import.meta as unknown as { env: Record<string, string> }).env
+  .VITE_SUPABASE_URL;
+const supabaseAnonKey = (import.meta as unknown as { env: Record<string, string> }).env
+  .VITE_SUPABASE_ANON_KEY;
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
-    autoRefreshToken: true
+    autoRefreshToken: true,
   },
   realtime: {
-    params: { eventsPerSecond: 20 }
-  }
+    params: { eventsPerSecond: 20 },
+  },
 });
 
 export async function ensureAnonAuth() {
-  const { data: { session } } = await supabase.auth.getSession();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
   if (session?.user) return session.user;
   const { data, error } = await supabase.auth.signInAnonymously();
   if (error) throw error;
